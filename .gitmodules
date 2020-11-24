@@ -1,0 +1,3 @@
+[submodule "pegTranspiler/compiler/qmkCompiler/qmk_firmware"]
+	path = pegTranspiler/compiler/qmkCompiler/qmk_firmware
+	url = https://github.com/qmk/qmk_firmware.git
