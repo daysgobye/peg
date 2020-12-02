@@ -1,4 +1,4 @@
-from keymapPart import keymapPart
+from . import keymapPart
 import json
 
 class QMKLayers:

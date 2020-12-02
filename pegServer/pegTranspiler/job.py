@@ -1,7 +1,7 @@
 import json
-from transpiledKeymap import transpiledKeymap
-from keymapPart.QMKLayers import QMKLayers
-from compiler.qmkCompiler.QMKCompiler import QMKCompiler
+from .transpiledKeymap import transpiledKeymap
+from .keymapPart.QMKLayers import QMKLayers
+from .compiler.qmkCompiler.QMKCompiler import QMKCompiler
 class Job:
     def __init__(self, jobId:str, keymapJson:json):
         self.transpiledKeymap=transpiledKeymap("","","")
@@ -27,15 +27,15 @@ class Job:
            if self.selectedCompiler=="QMK":
                return  QMKLayers(part,self.rawJson)
 
-
+    def startCompile(self,pathToFile):
+        self.pathToFile= pathToFile
+        
     def transpile(self):
         for part in self.keymapParts:
             part.transpile(self.transpiledKeymap)
         # print(self.keymapParts[0].tranpiledCode)
 
-    def compile(self):
+    def compile(self,finish):
         print("running compiler")
-        self.compiler.compile(self.transpiledKeymap)
+        self.compiler.compile(self.transpiledKeymap,self.startCompile,finish)
 
-    def finish(self):
-        pass

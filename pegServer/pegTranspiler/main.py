@@ -8,8 +8,8 @@ def getJsonFile():
 
 def main():
     jsonMap=getJsonFile()
-    firstJob=Job("abc7",jsonMap)
-    firstJob.transpile()
-    firstJob.compile()
+    firstJob=Job("abc9",jsonMap)
+    # firstJob.transpile()
+    # firstJob.compile()
 main()
 
