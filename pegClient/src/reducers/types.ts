@@ -9,6 +9,7 @@ export const UPDATE_KEYBOARD: string = "UPDATE_KEYBOARD";
 export const UPDATE_COMPILER: string = "UPDATE_COMPILER";
 export const UPDATE_KEYLAYOUT: string = "UPDATE_KEYLAYOUT";
 export const KEYMAP_FROM_SELECTION: string = "KEYMAP_FROM_SELECTION";
+export const CHANGE_LAYER: string = "CHANGE_LAYER";
 
 export interface Action {
   type: string;

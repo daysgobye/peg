@@ -1,5 +1,6 @@
 import React from "react";
-import logo from "./logo.svg";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import "react-widgets/dist/css/react-widgets.css";
 import "./App.css";
 import Picker from "./components/picker/picker";
@@ -10,10 +11,12 @@ import Options from "./components/options/options";
 function App() {
   return (
     <div className="App">
-      <Picker />
-      <Renderer />
-      <Settings />
-      <Options />
+      <DndProvider backend={HTML5Backend}>
+        <Picker />
+        <Renderer />
+        <Settings />
+        <Options />
+      </DndProvider>
     </div>
   );
 }

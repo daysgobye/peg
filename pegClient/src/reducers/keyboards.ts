@@ -9,6 +9,8 @@ import {
   SELECT_LAYOUT,
   LayoutKey,
   SELECT_KEYBORD,
+  LayerRange,
+  CHANGE_LAYER,
 } from "./types";
 export type InitialState = {
   selectedKeyboard: string;
@@ -16,6 +18,7 @@ export type InitialState = {
   keyboardLayout: any;
   selectedLayoutData: LayoutKey[];
   selectedLayoutName: string;
+  selectedLayer: LayerRange;
 };
 const initialState: InitialState = {
   selectedKeyboard: "",
@@ -23,6 +26,7 @@ const initialState: InitialState = {
   keyboardLayout: {},
   selectedLayoutData: [],
   selectedLayoutName: "",
+  selectedLayer: 0,
 };
 export const getKeyboardsList = () => async (dispatch: Dispatch) => {
   axios.get("/get-keyboard-list").then((res) => {
@@ -52,12 +56,20 @@ export const getKeyboardLayout = (keyboardName: string) => async (
       }
     });
 };
+export const changeLayer = (newLayer: LayerRange) => (
+  dispatch: Dispatch,
+  getState: () => RootState
+) => {
+  dispatch({ type: CHANGE_LAYER, payload: newLayer });
+};
 
 export default (
   state: InitialState = initialState,
   action: Action
 ): InitialState => {
   switch (action.type) {
+    case CHANGE_LAYER:
+      return { ...state, selectedLayer: action.payload };
     case SELECT_KEYBORD:
       return { ...state, selectedKeyboard: action.payload };
     case GET_KEYBOARDS:

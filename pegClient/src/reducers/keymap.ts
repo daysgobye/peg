@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Dispatch } from "redux";
 import { RootState } from ".";
+import { Keycode } from "../keycodes";
 import {
   Action,
   KEYMAP_FROM_SELECTION,
@@ -9,6 +10,7 @@ import {
   UPDATE_KEYBOARD,
   UPDATE_KEYLAYOUT,
 } from "./types";
+const keycode = Keycode.getInstance();
 enum Compiler {
   QMK = "QMK",
 }
@@ -41,8 +43,16 @@ export const replaceKey = (
   layer: LayerRange,
   index: number
 ) => (dispatch: Dispatch, getState: () => RootState) => {
-  const keyboardLayers = getState();
-  console.log("replacekey", keyboardLayers);
+  const keyboardLayers = getState().keymap.keymapParts.find(
+    (part) => part.name === "layers"
+  );
+  if (keyboardLayers) {
+    console.log(keyboardLayers, getState().keymap.keymapParts);
+    let copyofLayers = [...keyboardLayers.data];
+    copyofLayers[layer][index] = newKeyCode;
+    const newKeymapPart = { ...keyboardLayers, data: copyofLayers };
+    dispatch({ type: UPDATE_KEYLAYOUT, payload: newKeymapPart });
+  }
 };
 
 export const selectKeyboard = () => (
@@ -51,9 +61,18 @@ export const selectKeyboard = () => (
 ) => {
   const state = getState();
   console.log({ ...state });
+  const blankLayer = new Array(state.keyboards.selectedLayoutData.length).fill(
+    keycode.basic.KC_TRNS
+  );
+
   const keyboard = state.keyboards.selectedKeyboard;
   const layout = state.keyboards.selectedLayoutName;
-  const keymapParts = [""];
+  const keymapParts = [
+    {
+      name: "layers",
+      data: [...new Array(10).fill(blankLayer)],
+    },
+  ];
   dispatch({
     type: KEYMAP_FROM_SELECTION,
     payload: { keyboard, layout, keymapParts },

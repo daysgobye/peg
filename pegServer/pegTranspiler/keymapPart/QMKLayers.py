@@ -8,7 +8,6 @@ class QMKLayers:
         self.tranpiledCode=""
 
     def transpile(self,tranpiledKeymap):
-        print("I need to make c here")
         keymapLayers=[]
         for i,layer in enumerate(self.keymapJson["data"]):
             tempLayer=f'[{i}] = {self.rawJson["layout"]}({",".join(layer)})'

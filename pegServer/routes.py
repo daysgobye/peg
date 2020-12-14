@@ -36,8 +36,14 @@ def checkJob(jobId):
 
 @app.route("/get-keyboard-list",methods=["GET"])
 def getKeyboardsList():
-         
     currentDir= pathlib.Path(__file__).parent.absolute()
     with open(f'{currentDir}/keyboards.json') as keyboards:
-        keyboardsJson= json.dumps(keyboards.read())
+        keyboardsJson= keyboards.read()
         return keyboardsJson
+@app.route("/get-keyboard-layout/<keyboardName>")
+def getKeyboardLayout(keyboardName):
+    # add try catch 
+    qmkKeyboardPath=f'{pegConfig.config["QMKPATH"]}/keyboards'
+    layoutPath=f'{qmkKeyboardPath}/{keyboardName.replace("-","/",10)}/info.json'
+    with open(layoutPath) as layout:
+        return layout.read()
