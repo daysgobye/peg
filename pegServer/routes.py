@@ -1,7 +1,10 @@
 from __main__ import app
-from flask import request,send_file
+from flask import request,send_file,jsonify
 import pegQueue
 import os
+import pegConfig
+import json
+import pathlib
 
 @app.route("/compile",methods=['POST'])
 def newJob():
@@ -31,3 +34,10 @@ def checkJob(jobId):
     else:
         return "missing jobId"
 
+@app.route("/get-keyboard-list",methods=["GET"])
+def getKeyboardsList():
+         
+    currentDir= pathlib.Path(__file__).parent.absolute()
+    with open(f'{currentDir}/keyboards.json') as keyboards:
+        keyboardsJson= json.dumps(keyboards.read())
+        return keyboardsJson
