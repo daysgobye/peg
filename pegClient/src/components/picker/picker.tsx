@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../reducers/index";
-import { getKeyboardsList, getKeyboardLayout } from "../../reducers/keyboards";
+import {
+  compileKeyMap,
+  getKeyboardsList,
+  getKeyboardLayout,
+} from "../../reducers/keyboards";
+import { exportJson, importJson } from "../../reducers/keymap";
 import DropdownList from "react-widgets/lib/DropdownList";
 
 interface PickerProps {
@@ -9,28 +14,44 @@ interface PickerProps {
   getKeyboardLayout?: any;
   children?: React.ReactNode;
   keyboardsList?: string[];
+  compileKeyMap: any;
+  exportJson: any;
+  importJson: any;
 }
-const Picker: React.FC = (props: PickerProps) => {
+const Picker: React.FC<PickerProps> = ({
+  getKeyboardsList,
+  getKeyboardLayout,
+  keyboardsList,
+  compileKeyMap,
+  exportJson,
+  importJson,
+}) => {
   const [gotKeybords, setGotKeyboards] = useState(false);
   useEffect(() => {
-    if (
-      props &&
-      props.keyboardsList &&
-      props.keyboardsList.length === 0 &&
-      !gotKeybords
-    ) {
-      props.getKeyboardsList();
+    if (keyboardsList && keyboardsList.length === 0 && !gotKeybords) {
+      getKeyboardsList();
       setGotKeyboards(true);
     }
   });
   const getlayout = (selectedKeyboard: string) => {
-    props.getKeyboardLayout(selectedKeyboard);
+    getKeyboardLayout(selectedKeyboard);
   };
   return (
-    <div>
-      <h3>keyboards</h3>
-      <DropdownList data={props.keyboardsList} onChange={getlayout} />
-      <h3>layout</h3>
+    <div style={{ width: "100vw", display: "flex" }}>
+      <div style={{ width: "50%" }}>
+        <h3>keyboards</h3>
+        <DropdownList data={keyboardsList} onChange={getlayout} />
+        <h3>layout</h3>
+      </div>
+      <div>
+        <h3>save</h3>
+        <button onClick={() => compileKeyMap()}>compile</button>
+        <button onClick={exportJson}>saveJson</button>
+        <input
+          type="file"
+          onChange={(file: any) => importJson(file.target.files[0])}
+        />
+      </div>
     </div>
   );
 };
@@ -42,4 +63,7 @@ const mapStateToProps = (state: any) => ({
 export default connect(mapStateToProps, {
   getKeyboardsList,
   getKeyboardLayout,
+  compileKeyMap,
+  exportJson,
+  importJson,
 })(Picker);

@@ -1,17 +1,38 @@
 import React from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../reducers/index";
+import { changeLayer } from "../../reducers/keyboards";
+import { LayerRange } from "../../reducers/types";
 import SingleKey from "./singleKey";
 
 interface RendererProps {
   selectedLayout?: any;
   children?: React.ReactNode;
+  selectedLayer: LayerRange;
+  changeLayer: any;
 }
-const Renderer: React.FC<RendererProps> = ({ selectedLayout }) => {
+const Renderer: React.FC<RendererProps> = ({
+  selectedLayout,
+  changeLayer,
+  selectedLayer,
+}) => {
   if (selectedLayout.length > 0) {
     return (
       <div style={styles.container}>
-        <div style={styles.sideBar}></div>
+        <div style={styles.sideBar}>
+          {new Array(6 /* 6 is the total number of layers supported right now*/)
+            .fill(0)
+            .map((_, i) => (
+              <button
+                onClick={() => changeLayer(i)}
+                style={{
+                  background: i === selectedLayer ? "lightBlue" : "lightgrey",
+                }}
+              >
+                layer {i}{" "}
+              </button>
+            ))}
+        </div>
         <div
           style={{
             width: "85%",
@@ -42,9 +63,10 @@ const Renderer: React.FC<RendererProps> = ({ selectedLayout }) => {
 const mapStateToProps = (state: RootState) => ({
   keymap: state.keymap,
   selectedLayout: state.keyboards.selectedLayoutData,
+  selectedLayer: state.keyboards.selectedLayer,
 });
 
-export default connect(mapStateToProps, {})(Renderer);
+export default connect(mapStateToProps, { changeLayer })(Renderer);
 
 const styles = {
   container: {
@@ -56,6 +78,8 @@ const styles = {
     width: "75%",
   },
   sideBar: {
+    display: "flex",
+    "flex-direction": "column",
     width: "15%",
   },
 };

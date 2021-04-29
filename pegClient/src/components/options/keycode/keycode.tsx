@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
 interface KeycodeProps {
-  text: string;
+  keycode: any;
 }
 
-const Keycode: React.FC<KeycodeProps> = ({ text }) => {
+const Keycode: React.FC<KeycodeProps> = ({ keycode }) => {
   const [{ isDragging }, drag] = useDrag({
-    item: { type: "KEYCODE", code: text },
+    item: { type: "KEYCODE", code: keycode },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -23,7 +23,7 @@ const Keycode: React.FC<KeycodeProps> = ({ text }) => {
         margin: 10,
       }}
     >
-      {text}
+      {keycode.title}
     </div>
   );
 };
